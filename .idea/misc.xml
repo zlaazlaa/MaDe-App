@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/Android/workplace/stationsearch/app/src/main/res/drawable/shape_circular_angle_dark.xml" value="0.186" />
-        <entry key="..\:/Android/workplace/stationsearch/app/src/main/res/layout/activity_city.xml" value="0.1" />
-        <entry key="..\:/Android/workplace/stationsearch/app/src/main/res/layout/activity_main.xml" value="0.19524838012958964" />
-        <entry key="..\:/Android/workplace/stationsearch/app/src/main/res/layout/fragment_search_dialog.xml" value="0.5084364454443194" />
-        <entry key="..\:/Android/workplace/stationsearch/app/src/main/res/layout/item_city.xml" value="0.24947916666666667" />
-        <entry key="..\:/Android/workplace/stationsearch/app/src/main/res/layout/item_city_group.xml" value="0.24947916666666667" />
-        <entry key="..\:/Android/workplace/stationsearch/app/src/main/res/layout/item_city_hot.xml" value="0.264" />
-      </map>
-    </option>
-  </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="corretto-1.8" project-jdk-type="JavaSDK">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

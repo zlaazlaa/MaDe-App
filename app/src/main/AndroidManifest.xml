@@ -25,10 +25,12 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="7abe3485f03a4f6813b0fb3f77296fe5" />
-
         <activity
             android:name=".BuslineActivity"
             android:exported="true" />
+        <activity
+        android:name=".Bus_Route_Details"
+        android:exported="true" />
         <activity
             android:name=".ui.MainMainActivity"
             android:exported="true" />
@@ -37,7 +39,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

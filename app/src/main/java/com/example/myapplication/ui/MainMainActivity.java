@@ -60,6 +60,7 @@ public class MainMainActivity extends AppCompatActivity implements ItemOnclickLi
     private List<CityGroup> getCityGroupList(){
         //获取城市json数据
         cityBeans = JSONObject.parseArray(FileUtil.readJsonStr(this), CityBean.class);//获取所有城市对象
+        assert cityBeans != null;
         stringList = cityBeans.stream().map(CityBean::getCityName).collect(Collectors.toList());//提取所有城市对象的名称属性
         //按照首字母排序
         Comparator<CityBean> beanComparator = Comparator.comparing(CityBean::getCityStr, Collator.getInstance(Locale.ENGLISH));

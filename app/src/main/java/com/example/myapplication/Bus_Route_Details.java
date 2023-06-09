@@ -1,48 +1,56 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMap.InfoWindowAdapter;
-import com.amap.api.maps.AMap.OnMarkerClickListener;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.services.busline.BusLineItem;
 import com.amap.api.services.busline.BusLineQuery;
-import com.amap.api.services.busline.BusLineQuery.SearchType;
 import com.amap.api.services.busline.BusLineResult;
 import com.amap.api.services.busline.BusLineSearch;
-import com.amap.api.services.busline.BusLineSearch.OnBusLineSearchListener;
-import com.amap.api.services.busline.BusStationResult;
-import com.amap.api.services.busline.BusStationSearch.OnBusStationSearchListener;
 import com.amap.api.services.core.AMapException;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.util.Arrays;
 import java.util.List;
 
 import overlay.BusLineOverlay;
 import util.ToastUtil;
 
-/**
- * AMapV2地图中简单介绍公交线路搜索
- */
-public class BuslineActivity extends Activity implements OnMarkerClickListener,
-        InfoWindowAdapter, OnItemSelectedListener, OnBusLineSearchListener,
-        OnClickListener {
+public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickListener,
+        AMap.InfoWindowAdapter, AdapterView.OnItemSelectedListener, BusLineSearch.OnBusLineSearchListener,
+        View.OnClickListener {
+
+    private RelativeLayout bottomSheet;
+    private ImageView arrowImageView;
+    private TextView top_message;
+    private BusRouteMapView busRouteMapView;
+
+    private Button button_collect;
+    private Button reversing;
+    
+    ///////////////////////////
     private String BUS_NUM;
     private String CITY_ID;
     private AMap aMap;
@@ -59,10 +67,110 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
 
     private BusLineSearch busLineSearch;// 公交线路列表查询
 
+    @SuppressLint("MissingInflatedId")
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.busline_activity);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bus_route_details);
+
+        top_message = findViewById(R.id.top_message);
+        button_collect = findViewById(R.id.button_collect);
+        reversing = findViewById(R.id.reversing);
+
+        busRouteMapView = findViewById(R.id.busRouteMapView);
+        List<String> stopNames = Arrays.asList("Stop 1",
+                "Stop 2",
+                "Stop 3",
+                "Stop 4",
+                "Stop 5",
+                "Stop 6",
+                "Stop 7"); // Example stop names
+        int numStops = stopNames.size();
+        String Current_site = "Stop 4";
+        busRouteMapView.setBusRouteData(numStops, stopNames, Current_site);
+
+        reversing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                busRouteMapView.setBusRouteData(numStops, stopNames, Current_site);
+            }
+        });
+
+// Define the colors for different states
+        int[] buttonColors = {Color.parseColor("#f80eff"), Color.parseColor("#1da905")};
+        int[] textColors = {Color.WHITE, Color.WHITE};
+
+// Define the states
+        int[][] states = {
+                new int[]{android.R.attr.state_selected}, // Selected state
+                new int[]{} // Default state
+        };
+
+// Create the ColorStateList
+        ColorStateList colorStateList = new ColorStateList(states, buttonColors);
+        ColorStateList textStateList = new ColorStateList(states, textColors);
+
+// Set the color state list as the button's background color
+        button_collect.setBackgroundTintList(colorStateList);
+
+// Set the color state list as the button's text color
+        button_collect.setTextColor(textStateList);
+
+// Set the text for different states
+        String[] buttonTexts = {"已收藏", "收藏"};
+        button_collect.setText(buttonTexts[1]); // Set initial text
+
+// Add an OnClickListener to handle button clicks
+        button_collect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Toggle the button state and update the colors and text
+                button_collect.setSelected(!button_collect.isSelected());
+                button_collect.setBackgroundTintList(colorStateList);
+                button_collect.setTextColor(textStateList);
+                button_collect.setText(buttonTexts[button_collect.isSelected() ? 0 : 1]);
+            }
+        });
+
+
+
+        bottomSheet = findViewById(R.id.bottomSheet);
+        BottomSheetBehavior<RelativeLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setPeekHeight(bottomSheet.getHeight()+200);
+        bottomSheetBehavior.setState(bottomSheetBehavior.STATE_DRAGGING);
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    // Bottom sheet is collapsed
+                } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    // Bottom sheet is expanded
+                } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    // Bottom sheet is hidden
+                }
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+                // Handle sliding behavior here
+                arrowImageView = findViewById(R.id.arrowImageView);
+
+                // Calculate the threshold at which the arrow changes direction
+                float threshold = 0.5f;
+
+                if (slideOffset < threshold) {
+                    top_message.setText("上拉查看详细信息");
+                    // Show the down arrow when the slide offset is less than the threshold
+                    arrowImageView.setImageResource(R.drawable.ic_arrow_up);
+                } else {
+                    top_message.setText("下拉查看地图");
+                    // Show the up arrow when the slide offset is greater than or equal to the threshold
+                    arrowImageView.setImageResource(R.drawable.ic_arrow_down);
+                }
+            }
+        });
+
+        //////////
         Intent intent = getIntent();
         CITY_ID = intent.getStringExtra("city");
         BUS_NUM = intent.getStringExtra("bus");
@@ -75,7 +183,7 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
         //Demo中为了其他界面可以使用下载的离线地图，使用默认位置存储，屏蔽了自定义设置
 //        MapsInitializer.sdcardDir =OffLineMapUtils.getSdCacheDir(this);
         mapView = (MapView) findViewById(R.id.map);
-        mapView.onCreate(bundle);// 此方法必须重写
+        mapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
         searchLine();
     }
@@ -145,7 +253,7 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
             search = "641";
             searchName.setText(search);
         }
-        busLineQuery = new BusLineQuery(search, SearchType.BY_LINE_NAME,
+        busLineQuery = new BusLineQuery(search, BusLineQuery.SearchType.BY_LINE_NAME,
                 cityCode);// 第一个参数表示公交线路名，第二个参数表示公交线路查询，第三个参数表示所在城市名或者城市区号
         busLineQuery.setPageSize(10);// 设置每页返回多少条数据
         busLineQuery.setPageNumber(currentpage);// 设置查询第几页，第一页从0开始算起
@@ -229,59 +337,29 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
     }
 
     /**
-     * 公交线路搜索返回的结果显示在dialog中
-     */
-    public void showResultList(List<BusLineItem> busLineItems) {
-        BusLineDialog busLineDialog = new BusLineDialog(this, busLineItems);
-        busLineDialog.onListItemClicklistener(new OnListItemlistener() {
-            @Override
-            public void onListItemClick(BusLineDialog dialog,
-                                        final BusLineItem item) {
-                showProgressDialog();
-
-                String lineId = item.getBusLineId();// 得到当前点击item公交线路id
-                busLineQuery = new BusLineQuery(lineId, SearchType.BY_LINE_ID,
-                        cityCode);// 第一个参数表示公交线路id，第二个参数表示公交线路id查询，第三个参数表示所在城市名或者城市区号
-                BusLineSearch busLineSearch = null;
-                try {
-                    busLineSearch = new BusLineSearch(
-                            BuslineActivity.this, busLineQuery);
-                    busLineSearch.setOnBusLineSearchListener(BuslineActivity.this);
-                    busLineSearch.searchBusLineAsyn();// 异步查询公交线路id
-                } catch (AMapException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        busLineDialog.show();
-
-    }
-
-    /**
      * BusLineDialog ListView 选项点击回调
      */
     interface OnListItemlistener {
-        public void onListItemClick(BusLineDialog dialog, BusLineItem item);
+        public void onListItemClick(Bus_Route_Details.BusLineDialog dialog, BusLineItem item);
     }
 
     /**
      * 所有公交线路显示页面
      */
-    class BusLineDialog extends Dialog implements OnClickListener {
+    class BusLineDialog extends Dialog implements View.OnClickListener {
 
         private List<BusLineItem> busLineItems;
         private BusLineAdapter busLineAdapter;
         private Button preButton, nextButton;
         private ListView listView;
-        protected OnListItemlistener onListItemlistener;
+        protected Bus_Route_Details.OnListItemlistener onListItemlistener;
 
         public BusLineDialog(Context context, int theme) {
             super(context, theme);
         }
 
         public void onListItemClicklistener(
-                OnListItemlistener onListItemlistener) {
+                Bus_Route_Details.OnListItemlistener onListItemlistener) {
             this.onListItemlistener = onListItemlistener;
 
         }
@@ -300,12 +378,12 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
             nextButton = (Button) findViewById(R.id.nextButton);
             listView = (ListView) findViewById(R.id.listview);
             listView.setAdapter(busLineAdapter);
-            listView.setOnItemClickListener(new OnItemClickListener() {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1,
                                         int arg2, long arg3) {
-                    onListItemlistener.onListItemClick(BusLineDialog.this,
+                    onListItemlistener.onListItemClick(Bus_Route_Details.BusLineDialog.this,
                             busLineItems.get(arg2));
                     dismiss();
 
@@ -332,7 +410,7 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
             }
             showProgressDialog();
             busLineQuery.setPageNumber(currentpage);// 设置公交查询第几页
-            busLineSearch.setOnBusLineSearchListener(BuslineActivity.this);
+            busLineSearch.setOnBusLineSearchListener(Bus_Route_Details.this);
             busLineSearch.searchBusLineAsyn();// 异步查询公交线路名称
         }
     }
@@ -347,27 +425,27 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
         if (rCode == AMapException.CODE_AMAP_SUCCESS) {
             if (result != null && result.getQuery() != null
                     && result.getQuery().equals(busLineQuery)) {
-                if (result.getQuery().getCategory() == SearchType.BY_LINE_NAME) {
+                if (result.getQuery().getCategory() == BusLineQuery.SearchType.BY_LINE_NAME) {
                     if (result.getPageCount() > 0
                             && result.getBusLines() != null
                             && result.getBusLines().size() > 0) {
                         busLineResult = result;
                         lineItems = result.getBusLines();
                         if(lineItems != null) {
-                            busLineQuery = new BusLineQuery(lineItems.get(0).getBusLineId(), SearchType.BY_LINE_ID,
+                            busLineQuery = new BusLineQuery(lineItems.get(0).getBusLineId(), BusLineQuery.SearchType.BY_LINE_ID,
                                     cityCode);// 第一个参数表示公交线路id，第二个参数表示公交线路id查询，第三个参数表示所在城市名或者城市区号
                             BusLineSearch busLineSearch = null;
                             try {
                                 busLineSearch = new BusLineSearch(
-                                        BuslineActivity.this, busLineQuery);
-                                busLineSearch.setOnBusLineSearchListener(BuslineActivity.this);
+                                        Bus_Route_Details.this, busLineQuery);
+                                busLineSearch.setOnBusLineSearchListener(Bus_Route_Details.this);
                                 busLineSearch.searchBusLineAsyn();// 异步查询公交线路id
                             } catch (AMapException e) {
                                 e.printStackTrace();
                             }
                         }
                     }
-                } else if (result.getQuery().getCategory() == SearchType.BY_LINE_ID) {
+                } else if (result.getQuery().getCategory() == BusLineQuery.SearchType.BY_LINE_ID) {
                     aMap.clear();// 清理地图上的marker
                     busLineResult = result;
                     lineItems = busLineResult.getBusLines();
@@ -380,10 +458,10 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
                     }
                 }
             } else {
-                ToastUtil.show(BuslineActivity.this, "no result");
+                ToastUtil.show(Bus_Route_Details.this, "no result");
             }
         } else {
-            ToastUtil.showerror(BuslineActivity.this, rCode);
+            ToastUtil.showerror(Bus_Route_Details.this, rCode);
         }
     }
 
@@ -394,4 +472,6 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
     public void onClick(View v) {
         searchLine();
     }
+    
+    
 }

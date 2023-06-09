@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val button = findViewById<Button>(R.id.myButton)
         button.setOnClickListener {
-            val intent = Intent(this, BuslineActivity::class.java)
+            val intent = Intent(this, Bus_Route_Details::class.java)
             intent.putExtra("bus", findViewById<EditText>(R.id.bus).text.toString())
             intent.putExtra("city", findViewById<EditText>(R.id.city).text.toString())
             startActivity(intent)
