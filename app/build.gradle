@@ -40,9 +40,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true//配置viewBinding
+    }
 }
 
 dependencies {
+    implementation 'com.alibaba:fastjson:1.1.55.android'
     implementation fileTree(include: '*.jar', dir: 'libs')
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
