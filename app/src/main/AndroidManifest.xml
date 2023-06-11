@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!--声明后台定位权限-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 声明后台定位权限 -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <application
         android:allowBackup="true"
@@ -21,16 +22,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
+        android:allowNativeHeapPointerTagging="false"
         tools:targetApi="31">
+        <activity
+            android:name=".get_location"
+            android:exported="true" />
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="7abe3485f03a4f6813b0fb3f77296fe5" />
+
         <activity
             android:name=".BuslineActivity"
             android:exported="true" />
         <activity
-        android:name=".Bus_Route_Details"
-        android:exported="true" />
+            android:name=".Bus_Route_Details"
+            android:exported="true" />
         <activity
             android:name=".ui.MainMainActivity"
             android:exported="true" />
@@ -39,6 +46,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

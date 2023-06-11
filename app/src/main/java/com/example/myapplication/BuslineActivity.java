@@ -5,7 +5,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -21,7 +24,9 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMap.InfoWindowAdapter;
 import com.amap.api.maps.AMap.OnMarkerClickListener;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.busline.BusLineItem;
 import com.amap.api.services.busline.BusLineQuery;
 import com.amap.api.services.busline.BusLineQuery.SearchType;
@@ -42,7 +47,7 @@ import util.ToastUtil;
  */
 public class BuslineActivity extends Activity implements OnMarkerClickListener,
         InfoWindowAdapter, OnItemSelectedListener, OnBusLineSearchListener,
-        OnClickListener {
+        OnClickListener, AMap.OnMyLocationChangeListener {
     private String BUS_NUM;
     private String CITY_ID;
     private AMap aMap;
@@ -59,13 +64,15 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
 
     private BusLineSearch busLineSearch;// 公交线路列表查询
 
+    private Spinner spinnerGps;
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.busline_activity);
         Intent intent = getIntent();
-        CITY_ID = intent.getStringExtra("city");
-        BUS_NUM = intent.getStringExtra("bus");
+//        CITY_ID = intent.getStringExtra("city");
+//        BUS_NUM = intent.getStringExtra("bus");
         cityCode = CITY_ID;
         /*
          * 设置离线地图存储目录，在下载离线地图或初始化地图设置;
@@ -77,7 +84,50 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(bundle);// 此方法必须重写
         init();
-        searchLine();
+//        searchLine();
+
+//        //实现定位蓝点
+        MyLocationStyle locationStyle;
+        locationStyle = new MyLocationStyle();//初始化定位蓝点样式
+        locationStyle.interval(2000);//设置连续定位模式下的的定位间隔，值在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒
+        locationStyle.showMyLocation(true);
+        locationStyle.strokeColor(Color.BLUE);
+        locationStyle.radiusFillColor(Color.RED);
+        locationStyle.strokeWidth(20);
+        locationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.gps_point));
+        locationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE);
+        locationStyle.showMyLocation(true);
+        aMap.setMyLocationStyle(locationStyle); //设置定位蓝点的style
+        aMap.getUiSettings().setMyLocationButtonEnabled(false); // 设置默认定位按钮是否显示，非必须设置
+
+        locationStyle.anchor(0.0f, 1.0f);
+        aMap.setMyLocationEnabled(true);//设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
+    }
+
+    @Override
+    public void onMyLocationChange(Location location) {
+        // 定位回调监听
+        if(location != null) {
+            Log.e("amap", "onMyLocationChange 定位成功， lat: " + location.getLatitude() + " lon: " + location.getLongitude());
+            Bundle bundle = location.getExtras();
+            if(bundle != null) {
+                int errorCode = bundle.getInt(MyLocationStyle.ERROR_CODE);
+                String errorInfo = bundle.getString(MyLocationStyle.ERROR_INFO);
+                // 定位类型，可能为GPS WIFI等，具体可以参考官网的定位SDK介绍
+                int locationType = bundle.getInt(MyLocationStyle.LOCATION_TYPE);
+
+                /*
+                errorCode
+                errorInfo
+                locationType
+                */
+                Log.e("amap", "定位信息， code: " + errorCode + " errorInfo: " + errorInfo + " locationType: " + locationType );
+            } else {
+                Log.e("amap", "定位信息， bundle is null ");
+            }
+        } else {
+            Log.e("amap", "定位失败");
+        }
     }
 
     /**
@@ -87,6 +137,7 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
         if (aMap == null) {
             aMap = mapView.getMap();
             setUpMap();
+            aMap.setOnMyLocationChangeListener(this);
         }
     }
 
@@ -156,15 +207,6 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
         } catch (AMapException e) {
             e.printStackTrace();
         }
-
-        // 公交站点搜索事例
-        /*
-         * BusStationQuery query = new BusStationQuery(search,cityCode);
-         * query.setPageSize(10); query.setPageNumber(currentpage);
-         * BusStationSearch busStationSearch = new BusStationSearch(this,query);
-         * busStationSearch.setOnBusStationSearchListener(this);
-         * busStationSearch.searchBusStationAsyn();
-         */
     }
 
     /**
@@ -229,116 +271,6 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
     }
 
     /**
-     * 公交线路搜索返回的结果显示在dialog中
-     */
-    public void showResultList(List<BusLineItem> busLineItems) {
-        BusLineDialog busLineDialog = new BusLineDialog(this, busLineItems);
-        busLineDialog.onListItemClicklistener(new OnListItemlistener() {
-            @Override
-            public void onListItemClick(BusLineDialog dialog,
-                                        final BusLineItem item) {
-                showProgressDialog();
-
-                String lineId = item.getBusLineId();// 得到当前点击item公交线路id
-                busLineQuery = new BusLineQuery(lineId, SearchType.BY_LINE_ID,
-                        cityCode);// 第一个参数表示公交线路id，第二个参数表示公交线路id查询，第三个参数表示所在城市名或者城市区号
-                BusLineSearch busLineSearch = null;
-                try {
-                    busLineSearch = new BusLineSearch(
-                            BuslineActivity.this, busLineQuery);
-                    busLineSearch.setOnBusLineSearchListener(BuslineActivity.this);
-                    busLineSearch.searchBusLineAsyn();// 异步查询公交线路id
-                } catch (AMapException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        busLineDialog.show();
-
-    }
-
-    /**
-     * BusLineDialog ListView 选项点击回调
-     */
-    interface OnListItemlistener {
-        public void onListItemClick(BusLineDialog dialog, BusLineItem item);
-    }
-
-    /**
-     * 所有公交线路显示页面
-     */
-    class BusLineDialog extends Dialog implements OnClickListener {
-
-        private List<BusLineItem> busLineItems;
-        private BusLineAdapter busLineAdapter;
-        private Button preButton, nextButton;
-        private ListView listView;
-        protected OnListItemlistener onListItemlistener;
-
-        public BusLineDialog(Context context, int theme) {
-            super(context, theme);
-        }
-
-        public void onListItemClicklistener(
-                OnListItemlistener onListItemlistener) {
-            this.onListItemlistener = onListItemlistener;
-
-        }
-
-        public BusLineDialog(Context context, List<BusLineItem> busLineItems) {
-            this(context, android.R.style.Theme_NoTitleBar);
-            this.busLineItems = busLineItems;
-            busLineAdapter = new BusLineAdapter(context, busLineItems);
-        }
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.busline_dialog);
-            preButton = (Button) findViewById(R.id.preButton);
-            nextButton = (Button) findViewById(R.id.nextButton);
-            listView = (ListView) findViewById(R.id.listview);
-            listView.setAdapter(busLineAdapter);
-            listView.setOnItemClickListener(new OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1,
-                                        int arg2, long arg3) {
-                    onListItemlistener.onListItemClick(BusLineDialog.this,
-                            busLineItems.get(arg2));
-                    dismiss();
-
-                }
-            });
-            preButton.setOnClickListener(this);
-            nextButton.setOnClickListener(this);
-            if (currentpage <= 0) {
-                preButton.setEnabled(false);
-            }
-            if (currentpage >= busLineResult.getPageCount() - 1) {
-                nextButton.setEnabled(false);
-            }
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            this.dismiss();
-            if (v.equals(preButton)) {
-                currentpage--;
-            } else if (v.equals(nextButton)) {
-                currentpage++;
-            }
-            showProgressDialog();
-            busLineQuery.setPageNumber(currentpage);// 设置公交查询第几页
-            busLineSearch.setOnBusLineSearchListener(BuslineActivity.this);
-            busLineSearch.searchBusLineAsyn();// 异步查询公交线路名称
-        }
-    }
-
-
-    /**
      * 公交线路查询结果回调
      */
     @Override
@@ -368,7 +300,7 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
                         }
                     }
                 } else if (result.getQuery().getCategory() == SearchType.BY_LINE_ID) {
-                    aMap.clear();// 清理地图上的marker
+//                    aMap.clear();// 清理地图上的marker
                     busLineResult = result;
                     lineItems = busLineResult.getBusLines();
                     if(lineItems != null && lineItems.size() > 0) {
@@ -392,6 +324,6 @@ public class BuslineActivity extends Activity implements OnMarkerClickListener,
      */
     @Override
     public void onClick(View v) {
-        searchLine();
+//        searchLine();
     }
 }

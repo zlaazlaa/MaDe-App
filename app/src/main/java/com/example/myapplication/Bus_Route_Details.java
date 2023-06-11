@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,7 +26,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.busline.BusLineItem;
 import com.amap.api.services.busline.BusLineQuery;
 import com.amap.api.services.busline.BusLineResult;
@@ -40,7 +44,7 @@ import util.ToastUtil;
 
 public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickListener,
         AMap.InfoWindowAdapter, AdapterView.OnItemSelectedListener, BusLineSearch.OnBusLineSearchListener,
-        View.OnClickListener {
+        View.OnClickListener, AMap.OnMyLocationChangeListener {
 
     private RelativeLayout bottomSheet;
     private ImageView arrowImageView;
@@ -195,6 +199,16 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
         if (aMap == null) {
             aMap = mapView.getMap();
             setUpMap();
+
+            aMap.setOnMyLocationChangeListener(this);
+            MyLocationStyle locationStyle;
+            locationStyle = new MyLocationStyle();//初始化定位蓝点样式
+            locationStyle.interval(2000);//设置连续定位模式下的的定位间隔，值在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒
+            locationStyle.showMyLocation(false);
+            aMap.setMyLocationStyle(locationStyle); //设置定位蓝点的style
+            aMap.getUiSettings().setMyLocationButtonEnabled(false); // 设置默认定位按钮是否显示，非必须设置
+            locationStyle.anchor(0.0f, 1.0f);
+            aMap.setMyLocationEnabled(true);//设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
         }
     }
 
@@ -334,6 +348,38 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
         cityCode = "010";
+    }
+
+    @Override
+    public void onMyLocationChange(Location location) {
+        if (location != null) {
+            Log.e("amap", "onMyLocationChange 定位成功， lat: " + location.getLatitude() + " lon: " + location.getLongitude());
+            Bundle bundle = location.getExtras();
+            if (bundle != null) {
+                int errorCode = bundle.getInt(MyLocationStyle.ERROR_CODE);
+                String errorInfo = bundle.getString(MyLocationStyle.ERROR_INFO);
+                // 定位类型，可能为GPS WIFI等，具体可以参考官网的定位SDK介绍
+                int locationType = bundle.getInt(MyLocationStyle.LOCATION_TYPE);
+
+                /*
+                errorCode
+                errorInfo
+                locationType
+                */
+                Log.e("amap", "定位信息， code: " + errorCode + " errorInfo: " + errorInfo + " locationType: " + locationType);
+            } else {
+                Log.e("amap", "定位信息， bundle is null ");
+
+            }
+
+        } else {
+            Log.e("amap", "定位失败");
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 
     /**
