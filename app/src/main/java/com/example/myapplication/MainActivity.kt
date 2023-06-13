@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, Bus_Route_Details::class.java)
             intent.putExtra("xing_busNumber", findViewById<EditText>(R.id.bus).text.toString())
             intent.putExtra("xing_city_code", findViewById<EditText>(R.id.city).text.toString())
-            intent.putExtra("xing_Current_site", "少年宫")
+            intent.putExtra("xing_Current_site", "白山西客运站")
             intent.putExtra("xing_city", "beijing")
             intent.putExtra("xing_user", "mqy")
 

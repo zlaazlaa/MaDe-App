@@ -433,6 +433,16 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
                 initBus();
                 List<Double> buses = new LinkedList<>();
                 double tmp = 0;
+                if(Current_i == 0){
+                    Current_size_view.setText("您已在起点站");
+                    next_bus_number.setText("最近0班");
+
+                    next_bus_1.setText("--分钟");
+                    next_bus_message_1.setText("还有--公里");
+                    next_bus_2.setText("--分钟");
+                    next_bus_message_2.setText("还有--公里");
+                    return;
+                }
                 for (int i=0; i<Current_i ; i++) {
                     tmp += station_time.get(i);
                 }
@@ -441,11 +451,10 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
                         buses.add((aDouble%tmp)*10);
                     }
                 }
-
                 // Create a DecimalFormat instance with the desired format pattern
                 DecimalFormat decimalFormat = new DecimalFormat("#0.0");
                 if(buses.size() == 0){
-                    next_bus_number.setText("最近0站");
+                    next_bus_number.setText("最近0班");
 
                     next_bus_1.setText("--分钟");
                     next_bus_message_1.setText("还有--公里");
@@ -454,7 +463,7 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
 
                 }
                 if(buses.size()==1){
-                    next_bus_number.setText("最近1站");
+                    next_bus_number.setText("最近1班");
 
                     // Format the result to two decimal places
                     String formattedResult = decimalFormat.format(tmp-buses.get(buses.size()-1));
@@ -464,7 +473,7 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
                     next_bus_message_2.setText("还有--公里");
                 }
                 if(buses.size()>=2){
-                    next_bus_number.setText("最近2站");
+                    next_bus_number.setText("最近2班");
 
                     // Format the result to two decimal places
                     String formattedResult = decimalFormat.format(Math.floor(Math.abs(tmp-buses.get(buses.size()-1))));
@@ -1489,6 +1498,6 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
 
         return distance;
     }
-    
-    
+
+
 }
