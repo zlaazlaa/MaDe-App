@@ -101,7 +101,7 @@ class BusStopItemRecyclerViewAdapter(
 
 
         holder.checkDetailBottom.setOnClickListener {
-            activityJumper.jumpToBusStopDetail()
+            activityJumper.jumpToBusStopDetail(item.city.cityStr, item.city.cityName, item.name)
         }
 
         holder.favoriteButton.setOnClickListener {

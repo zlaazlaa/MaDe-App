@@ -45,9 +45,9 @@ class FavoriteItemRecycleViewAdapter(
             if(view != holder.dragHandle&& view!=holder.deleteButton){
                 item.let {
                     if(it.isBusLine())
-                        activityJumper.jumpToBusLineDetail()
+                        activityJumper.jumpToBusLineDetail(item.city.cityStr,item.city.cityName,item.name,item.busLine!!.startStopName!!)
                     else if(it.isBusStop())
-                        activityJumper.jumpToBusStopDetail()
+                        activityJumper.jumpToBusStopDetail(item.city.cityStr, item.city.cityName, item.name)
                 }
             }
         }

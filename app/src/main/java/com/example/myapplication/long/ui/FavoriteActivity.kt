@@ -1,10 +1,13 @@
 package com.example.myapplication.long.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.Bus_Route_Details
+import com.example.myapplication.YangMainActivity
 import com.example.myapplication.long.ActivityJumper
 import com.example.myapplication.databinding.ActivityFavoriteBinding
 import com.example.myapplication.long.ui.adapter.FavoriteContainerItemRecycleViewAdapter
@@ -49,13 +52,27 @@ class FavoriteActivity : AppCompatActivity() , ActivityJumper {
         progressDialogFragment.show(supportFragmentManager,"data loading")
     }
 
-    override fun jumpToBusStopDetail() {
-        Toast.makeText(this,"jump to bus stop Detail",Toast.LENGTH_SHORT).show()
+    override fun jumpToBusStopDetail(city_str: String, city_name: String, station: String) {
+        val intent = Intent(this, YangMainActivity::class.java)
+        intent.putExtra("city_str", city_str)
+        intent.putExtra("city_name", city_name)
+        intent.putExtra("station", station)
+        Toast.makeText(this, "jump to busStop detail", Toast.LENGTH_SHORT).show()
+        startActivity(intent)
     }
 
-    override fun jumpToBusLineDetail() {
-        Toast.makeText(this,"jump to bus line Detail",Toast.LENGTH_SHORT).show()
+    override fun jumpToBusLineDetail(city_str: String, city_name: String, line: String,nowStopName:String) {
+        val intent = Intent(this, Bus_Route_Details::class.java)
+        intent.putExtra("city_str", city_str)
+        intent.putExtra("city_name", city_name)
+        intent.putExtra("line", line)
+        intent.putExtra("xing_Current_site",nowStopName)
+        intent.putExtra("xing_user",viewModel.user!!)
+        startActivity(intent)
+        Toast.makeText(this, "jump to busLine detail", Toast.LENGTH_SHORT).show()
     }
+
+
 
 //    override fun onStop() {
 //        viewModel.postFavorite()

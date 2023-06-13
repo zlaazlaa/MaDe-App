@@ -68,7 +68,7 @@ class BusLineInStopItemRecyclerViewAdapter(
 
         holder.root.setOnClickListener {
             if(it != holder.favoriteButton)
-                activityJumper.jumpToBusLineDetail()
+                activityJumper.jumpToBusLineDetail(item.city.cityStr,item.city.cityName,item.name,item.startStopName!!)
         }
     }
 

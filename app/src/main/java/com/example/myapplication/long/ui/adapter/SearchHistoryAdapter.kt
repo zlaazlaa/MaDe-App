@@ -50,10 +50,10 @@ class SearchItemAdapter(
 
         holder.root.setOnClickListener {
             item.busLine?.let {
-                activityJumper.jumpToBusLineDetail()
+                activityJumper.jumpToBusLineDetail(item.city.cityStr,item.city.cityName,item.name,it.startStopName!!)
             }
             item.busStop?.let {
-                activityJumper.jumpToBusStopDetail()
+                activityJumper.jumpToBusStopDetail(item.city.cityStr, item.city.cityName, item.name)
             }
         }
     }

@@ -16,6 +16,7 @@
     <application
         android:allowBackup="true"
         android:allowNativeHeapPointerTagging="false"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -41,6 +42,12 @@
             android:exported="true" />
         <activity
             android:name=".long.LongMainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".long.ui.CityActivity"
+            android:exported="true" />
+        <activity
+            android:name=".long.ui.FavoriteActivity"
             android:exported="true" />
         <activity
             android:name="com.example.myapplication.MainActivity"

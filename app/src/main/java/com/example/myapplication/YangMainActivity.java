@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -128,9 +129,13 @@ public class YangMainActivity extends AppCompatActivity {
         textView=findViewById(R.id.textView);
         listView1=findViewById(R.id.ListView1);
         //根据页面跳转设置变量city，station_N，username
-        city="南京";
-        city_str="nanjing";
-        station_N="邮电大学东";
+
+//        city="南京";
+//        city_str="nanjing";
+//        station_N="邮电大学东";
+        city = getIntent().getStringExtra("city_name");
+        city_str = getIntent().getStringExtra("city_str");
+        station_N = getIntent().getStringExtra("station");
         textView.setText(station_N);
         FUrl="https://ljm-python.azurewebsites.net/query_favorite?message="+username;
         Thread thread1=new Thread(){
@@ -282,6 +287,13 @@ public class YangMainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //跳转到其他页面
                 //调用city_str，city，station_N，route_N传递参数
+                Intent intent = new Intent(YangMainActivity.this, Bus_Route_Details.class);
+                intent.putExtra("city_str", city_str);
+                intent.putExtra("city_name", city);
+                intent.putExtra("line", routeN[i].split("\\(")[0]);
+                intent.putExtra("xing_Current_site",routeDS1[i]);
+                intent.putExtra("xing_user",username);
+                startActivity(intent);
             }
         });
     }
