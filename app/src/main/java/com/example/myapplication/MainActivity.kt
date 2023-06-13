@@ -21,8 +21,18 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.myButton)
         button.setOnClickListener {
             val intent = Intent(this, Bus_Route_Details::class.java)
-            intent.putExtra("bus", findViewById<EditText>(R.id.bus).text.toString())
-            intent.putExtra("city", findViewById<EditText>(R.id.city).text.toString())
+            intent.putExtra("xing_busNumber", findViewById<EditText>(R.id.bus).text.toString())
+            intent.putExtra("xing_city_code", findViewById<EditText>(R.id.city).text.toString())
+            intent.putExtra("xing_Current_site", "少年宫")
+            intent.putExtra("xing_city", "beijing")
+            intent.putExtra("xing_user", "mqy")
+
+
+//            private static final String xing_city = "xing_city";
+//            private static final String xing_busNumber = "xing_busNumber";
+//            private static final String xing_Current_site = "xing_Current_site";
+//            private static final String xing_user = "xing_user";
+//            private static final String xing_city_code = "xing_city_code";
             startActivity(intent)
         }
         privacyCompliance()

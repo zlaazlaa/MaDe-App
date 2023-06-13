@@ -8,6 +8,31 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Other views in your layout -->
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/loading_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/loading_image"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:alpha="0" />
+
+    </RelativeLayout>
+
     <!-- Bottom sheet view -->
     <RelativeLayout
         android:id="@+id/bottomSheet"
@@ -97,6 +122,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
+                        android:id="@+id/ic_arrow_left"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="125dp"
@@ -114,6 +140,7 @@
                         android:text="终点站"
                         android:textSize="22.5dp"
                         android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -135,6 +162,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
+                    android:id="@+id/all_miles"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:layout_marginLeft="25dp"
@@ -146,6 +174,7 @@
                     android:layout_height="match_parent">
 
                     <FrameLayout
+                        android:id="@+id/frame_layout"
                         android:layout_width="375dp"
                         android:layout_height="200dp"
                         android:layout_gravity="center_horizontal"
@@ -167,15 +196,18 @@
                             android:textSize="20dp" />
 
                         <TextView
+                            android:id="@+id/Current_site"
                             android:layout_width="150dp"
                             android:layout_height="25dp"
                             android:layout_marginLeft="35dp"
                             android:layout_marginTop="15dp"
                             android:text="当前所在站点"
                             android:textSize="20dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textAlignment="center"/>
 
                         <TextView
+                            android:id="@+id/next_bus_number"
                             android:layout_width="80dp"
                             android:layout_height="25dp"
                             android:layout_marginLeft="175dp"
@@ -204,7 +236,7 @@
                             android:backgroundTint="@color/white"
                             android:gravity="center_horizontal"
                             android:paddingLeft="10dp"
-                            android:text="还有XX站 · X.X公里"
+                            android:text="还有X.X公里"
                             android:textSize="17.5dp" />
 
                         <Button
@@ -228,7 +260,7 @@
                             android:backgroundTint="@color/white"
                             android:gravity="center_horizontal"
                             android:paddingLeft="10dp"
-                            android:text="还有XX站 · X.X公里"
+                            android:text="还有X.X公里"
                             android:textSize="17.5dp" />
 
                     </FrameLayout>
@@ -251,7 +283,7 @@
             android:layout_width="match_parent"
             android:layout_height="600dp"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="200dp"/>
+            android:layout_marginTop="200dp" />
     </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
