@@ -35,6 +35,8 @@
         <activity
             android:name=".ui.MainMainActivity"
             android:exported="true" />
+        <activity android:name=".YangMainActivity"
+            android:exported="true" />
         <activity
             android:name="com.example.myapplication.MainActivity"
             android:exported="true">
