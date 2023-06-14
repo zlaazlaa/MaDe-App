@@ -247,7 +247,7 @@ public class YangMainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
-                    toggleButton.setBackgroundResource(R.drawable.ic_action_name);
+                    toggleButton.setBackgroundResource(R.drawable.favorite_timage);
                 }else {
                     toggleButton.setBackgroundResource(R.drawable.favourite_fimage);
                 };
