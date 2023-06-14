@@ -1,10 +1,10 @@
-package com.example.myapplication.long
+package com.example.myapplication.long2
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.myapplication.databinding.ActivityMainLongBinding
-import com.example.myapplication.long.ui.*
+import com.example.myapplication.long2.ui.*
 
 class LongMainActivity : AppCompatActivity() {
     private var binding :ActivityMainLongBinding? = null

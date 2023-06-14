@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#eff0f4"
     android:orientation="vertical"
-    tools:context=".long.ui.CityActivity">
+    tools:context=".long2.ui.CityActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

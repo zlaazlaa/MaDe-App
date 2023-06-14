@@ -1,4 +1,4 @@
-package com.example.myapplication.long.ui
+package com.example.myapplication.long2.ui
 
 import android.app.AlertDialog
 import android.app.Dialog

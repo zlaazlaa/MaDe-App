@@ -1,4 +1,4 @@
-package com.example.myapplication.long.ui
+package com.example.myapplication.long2.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,10 +8,10 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.Bus_Route_Details
 import com.example.myapplication.YangMainActivity
-import com.example.myapplication.long.ActivityJumper
+import com.example.myapplication.long2.ActivityJumper
 import com.example.myapplication.databinding.ActivityFavoriteBinding
-import com.example.myapplication.long.ui.adapter.FavoriteContainerItemRecycleViewAdapter
-import com.example.myapplication.long.ui.view_model.FavoriteViewModel
+import com.example.myapplication.long2.ui.adapter.FavoriteContainerItemRecycleViewAdapter
+import com.example.myapplication.long2.ui.view_model.FavoriteViewModel
 
 const val KEY_FAVORITE_USER = "com.example.myapplication.ui.favoriteActivity.user"
 class FavoriteActivity : AppCompatActivity() , ActivityJumper {

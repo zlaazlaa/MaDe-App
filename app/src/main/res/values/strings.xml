@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Ma De Map</string>
     <string name="animate">Animate</string>
     <string name="basic_map">显示地图</string>
     <string name="check_detail_button_label"><![CDATA[查看详情>]]></string>

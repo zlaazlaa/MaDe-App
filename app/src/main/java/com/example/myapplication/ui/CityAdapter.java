@@ -45,7 +45,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ItemHolder> {
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemCityBinding binding = ItemCityBinding.inflate(LayoutInflater.from(context), parent, false);
-        return new ItemHolder(binding);
+        return new CityAdapter.ItemHolder(binding);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ItemHolder> {
         }
         holder.itemView.setOnClickListener(v->{
             if (onclickListener != null) {
-                onclickListener.itemOnclick(cityBeanList.get(holder.getAdapterPosition()).getCityName());
+                onclickListener.itemOnclick(cityBeanList.get(holder.getAdapterPosition()));
             }
         });
     }

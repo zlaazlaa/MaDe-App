@@ -1,12 +1,12 @@
-package com.example.myapplication.long.ui.adapter
+package com.example.myapplication.long2.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.long.ActivityJumper
+import com.example.myapplication.long2.ActivityJumper
 import com.example.myapplication.databinding.ItemStopOrLineBinding
-import com.example.myapplication.long.model.StopOrLine
+import com.example.myapplication.long2.model.StopOrLine
 
 class SearchItemAdapter(
     private val activityJumper: ActivityJumper

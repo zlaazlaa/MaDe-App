@@ -1,9 +1,9 @@
-package com.example.myapplication.long
+package com.example.myapplication.long2
 
-import com.example.myapplication.long.model.BusLine
-import com.example.myapplication.long.model.BusStop
-import com.example.myapplication.long.model.City
-import com.example.myapplication.long.model.Favorite
+import com.example.myapplication.long2.model.BusLine
+import com.example.myapplication.long2.model.BusStop
+import com.example.myapplication.long2.model.City
+import com.example.myapplication.long2.model.Favorite
 
 typealias OperateType = FavoriteOperator.OperateType
 

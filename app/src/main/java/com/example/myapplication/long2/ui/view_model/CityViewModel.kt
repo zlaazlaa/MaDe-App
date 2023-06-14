@@ -1,4 +1,4 @@
-package com.example.myapplication.long.ui.view_model
+package com.example.myapplication.long2.ui.view_model
 
 import android.app.Application
 import android.util.Log
@@ -6,11 +6,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.long.CwlRepository
-import com.example.myapplication.long.FavoriteOperator
-import com.example.myapplication.long.OperateType
-import com.example.myapplication.long.Searcher
-import com.example.myapplication.long.model.*
+import com.example.myapplication.long2.CwlRepository
+import com.example.myapplication.long2.FavoriteOperator
+import com.example.myapplication.long2.OperateType
+import com.example.myapplication.long2.Searcher
+import com.example.myapplication.long2.model.*
 
 import kotlinx.coroutines.launch
 

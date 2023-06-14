@@ -1,4 +1,4 @@
-package com.example.myapplication.long.ui.adapter
+package com.example.myapplication.long2.ui.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.myapplication.long.ActivityJumper
-import com.example.myapplication.long.FavoriteOperator
+import com.example.myapplication.long2.ActivityJumper
+import com.example.myapplication.long2.FavoriteOperator
 import com.example.myapplication.R
 
 import com.example.myapplication.databinding.ItemBusLineInStopBinding
-import com.example.myapplication.long.model.BusLine
-import com.example.myapplication.long.model.Favorite
-import com.example.myapplication.long.model.getFavorite
+import com.example.myapplication.long2.model.BusLine
+import com.example.myapplication.long2.model.Favorite
+import com.example.myapplication.long2.model.getFavorite
 
 class BusLineInStopItemRecyclerViewAdapter(
     private val values: List<BusLine>,

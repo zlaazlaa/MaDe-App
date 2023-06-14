@@ -1,4 +1,4 @@
-package com.example.myapplication.long.model
+package com.example.myapplication.long2.model
 fun List<Favorite>.getFavorite(busLine: BusLine): Favorite?{
     return this.find {
         it.busLine == busLine

@@ -41,13 +41,13 @@
             android:name=".YangMainActivity"
             android:exported="true" />
         <activity
-            android:name=".long.LongMainActivity"
+            android:name=".long2.LongMainActivity"
             android:exported="true" />
         <activity
-            android:name=".long.ui.CityActivity"
+            android:name=".long2.ui.CityActivity"
             android:exported="true" />
         <activity
-            android:name=".long.ui.FavoriteActivity"
+            android:name=".long2.ui.FavoriteActivity"
             android:exported="true" />
         <activity
             android:name="com.example.myapplication.MainActivity"

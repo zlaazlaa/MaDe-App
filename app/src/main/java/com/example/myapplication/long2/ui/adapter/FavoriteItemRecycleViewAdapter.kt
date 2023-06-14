@@ -1,4 +1,4 @@
-package com.example.myapplication.long.ui.adapter
+package com.example.myapplication.long2.ui.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,11 +6,11 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.long.ActivityJumper
-import com.example.myapplication.long.FavoriteOperator
+import com.example.myapplication.long2.ActivityJumper
+import com.example.myapplication.long2.FavoriteOperator
 import com.example.myapplication.databinding.ItemFavoriteBinding
-import com.example.myapplication.long.model.City
-import com.example.myapplication.long.model.Favorite
+import com.example.myapplication.long2.model.City
+import com.example.myapplication.long2.model.Favorite
 
 class FavoriteItemRecycleViewAdapter(
     val city: City,

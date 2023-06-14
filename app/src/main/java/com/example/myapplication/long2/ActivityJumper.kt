@@ -1,4 +1,4 @@
-package com.example.myapplication.long
+package com.example.myapplication.long2
 
 interface ActivityJumper {
     fun jumpToBusStopDetail(city_str: String, city_name: String, station: String)

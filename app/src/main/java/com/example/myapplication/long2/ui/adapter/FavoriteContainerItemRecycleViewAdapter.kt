@@ -1,18 +1,18 @@
-package com.example.myapplication.long.ui.adapter
+package com.example.myapplication.long2.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.long.ActivityJumper
-import com.example.myapplication.long.FavoriteOperator
-import com.example.myapplication.long.FavoriteOperator.OperateType.*
-import com.example.myapplication.long.OperateType
+import com.example.myapplication.long2.ActivityJumper
+import com.example.myapplication.long2.FavoriteOperator
+import com.example.myapplication.long2.FavoriteOperator.OperateType.*
+import com.example.myapplication.long2.OperateType
 import com.example.myapplication.databinding.ItemFavoriteContainerBinding
-import com.example.myapplication.long.model.City
-import com.example.myapplication.long.model.Favorite
-import com.example.myapplication.long.ui.FavoriteItemTouchHelper
+import com.example.myapplication.long2.model.City
+import com.example.myapplication.long2.model.Favorite
+import com.example.myapplication.long2.ui.FavoriteItemTouchHelper
 
 class FavoriteContainerItemRecycleViewAdapter(
     private val operator: FavoriteOperator,

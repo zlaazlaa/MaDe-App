@@ -1,9 +1,9 @@
-package com.example.myapplication.long.ui
+package com.example.myapplication.long2.ui
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.long.FavoriteOperator
-import com.example.myapplication.long.ui.adapter.FavoriteItemRecycleViewAdapter
+import com.example.myapplication.long2.FavoriteOperator
+import com.example.myapplication.long2.ui.adapter.FavoriteItemRecycleViewAdapter
 
 class FavoriteItemTouchHelper(
     private val itemMover: FavoriteOperator

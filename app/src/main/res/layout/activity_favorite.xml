@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
 
     android:background="#eff0f4"
-    tools:context=".long.ui.FavoriteActivity">
+    tools:context=".long2.ui.FavoriteActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_in_favorite"

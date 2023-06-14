@@ -1,17 +1,17 @@
-package com.example.myapplication.long.ui.view_model
+package com.example.myapplication.long2.ui.view_model
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.long.CwlRepository
-import com.example.myapplication.long.FavoriteOperator
-import com.example.myapplication.long.OperateType
-import com.example.myapplication.long.model.BusLine
-import com.example.myapplication.long.model.BusStop
-import com.example.myapplication.long.model.City
-import com.example.myapplication.long.model.Favorite
+import com.example.myapplication.long2.CwlRepository
+import com.example.myapplication.long2.FavoriteOperator
+import com.example.myapplication.long2.OperateType
+import com.example.myapplication.long2.model.BusLine
+import com.example.myapplication.long2.model.BusStop
+import com.example.myapplication.long2.model.City
+import com.example.myapplication.long2.model.Favorite
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(application: Application):AndroidViewModel(application) ,

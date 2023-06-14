@@ -1,4 +1,4 @@
-package com.example.myapplication.long.ui.adapter
+package com.example.myapplication.long2.ui.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.*
-import com.example.myapplication.long.FavoriteOperator.OperateType.*
+import com.example.myapplication.long2.FavoriteOperator.OperateType.*
 
 import com.example.myapplication.databinding.ItemBusStopBinding
-import com.example.myapplication.long.ActivityJumper
-import com.example.myapplication.long.FavoriteOperator
-import com.example.myapplication.long.OperateType
-import com.example.myapplication.long.model.BusStop
-import com.example.myapplication.long.model.Favorite
-import com.example.myapplication.long.model.getFavorite
+import com.example.myapplication.long2.ActivityJumper
+import com.example.myapplication.long2.FavoriteOperator
+import com.example.myapplication.long2.OperateType
+import com.example.myapplication.long2.model.BusStop
+import com.example.myapplication.long2.model.Favorite
+import com.example.myapplication.long2.model.getFavorite
 
 class BusStopItemRecyclerViewAdapter(
     private val favoriteOperator: FavoriteOperator,

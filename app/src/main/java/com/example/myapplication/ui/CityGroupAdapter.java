@@ -31,13 +31,13 @@ public class CityGroupAdapter extends RecyclerView.Adapter<CityGroupAdapter.Item
     }
     @NonNull
     @Override
-    public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CityGroupAdapter.ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemCityGroupBinding binding = ItemCityGroupBinding.inflate(LayoutInflater.from(context), parent, false);
-        return new ItemHolder(binding);
+        return new CityGroupAdapter.ItemHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CityGroupAdapter.ItemHolder holder, int position) {
         CityGroup cityGroup = cityGroupList.get(position);
         //为分组设置标题（首字母）
         holder.binding.tvCityTitle.setText(cityGroup.getTitle());

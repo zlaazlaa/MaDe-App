@@ -1,4 +1,4 @@
-package com.example.myapplication.long.ui
+package com.example.myapplication.long2.ui
 
 import android.content.Intent
 import android.os.Build
@@ -13,22 +13,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.Bus_Route_Details
 import com.example.myapplication.YangMainActivity
-import com.example.myapplication.long.ActivityJumper
+import com.example.myapplication.long2.ActivityJumper
 import com.example.myapplication.databinding.ActivityCityLongBinding
 import com.example.myapplication.databinding.BottomSheetSearchBinding
-import com.example.myapplication.long.model.City
-import com.example.myapplication.long.model.StopOrLine
-import com.example.myapplication.long.ui.adapter.BusStopItemRecyclerViewAdapter
-import com.example.myapplication.long.ui.adapter.SearchItemAdapter
-import com.example.myapplication.long.ui.view_model.CityViewModel
+import com.example.myapplication.long2.model.City
+import com.example.myapplication.long2.model.StopOrLine
+import com.example.myapplication.long2.ui.adapter.BusStopItemRecyclerViewAdapter
+import com.example.myapplication.long2.ui.adapter.SearchItemAdapter
+import com.example.myapplication.long2.ui.view_model.CityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-const val KEY_CITY_NAME = "com.example.myapplication.ui.cityActivity.cityName"
-const val KEY_CITY_STR = "com.example.myapplication.ui.cityActivity.cityStr"
-const val KEY_CITY_USER = "com.example.myapplication.ui.cityActivity.user"
+const val KEY_CITY_NAME = "city_name"
+const val KEY_CITY_STR = "city_str"
+const val KEY_CITY_USER = "user"
 
 class CityActivity : AppCompatActivity(), ActivityJumper {
     private var binding: ActivityCityLongBinding? = null

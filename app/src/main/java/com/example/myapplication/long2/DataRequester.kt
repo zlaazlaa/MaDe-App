@@ -1,7 +1,7 @@
-package com.example.myapplication.long
+package com.example.myapplication.long2
 
 import android.util.Log
-import com.example.myapplication.long.model.City
+import com.example.myapplication.long2.model.City
 import kotlinx.coroutines.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType

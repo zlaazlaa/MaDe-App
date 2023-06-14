@@ -58,7 +58,7 @@ public class SearchDialogFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        //搜索框请求焦点
+        //请求焦点
         binding.editSearch.requestFocus();
     }
 
@@ -81,11 +81,9 @@ public class SearchDialogFragment extends DialogFragment {
                 keyword = s.toString().trim();
                 //如果有输入
                 if (keyword.length()>0){
-                    //搜索到的城市结果列表
                     List<CityBean> searchCity = cityBeans.stream().filter(cityBean -> cityBean.getCityName().contains(keyword)).collect(Collectors.toList());
                     //输入未搜索到结果
                     if (searchCity.isEmpty()) {
-                        //隐藏隐藏有结果的搜索列表，显示空结果的搜索列表
                         binding.listSearch.setVisibility(View.INVISIBLE);
                         binding.tvNoResult.setVisibility(View.VISIBLE);
                     }
@@ -95,12 +93,10 @@ public class SearchDialogFragment extends DialogFragment {
                         binding.tvNoResult.setVisibility(View.INVISIBLE);
                         if (cityAdapter == null) {
                             cityAdapter = new CityAdapter(getContext(), searchCity, keyword, true);
-                            //给搜索列表项设置点击事件
                             cityAdapter.setOnclickListener(itemOnclickListener);
                             binding.listSearch.setAdapter(cityAdapter);
                         } else {
                             cityAdapter.reloadDataSpan(searchCity,keyword);
-                            //如果输入字段有匹配的搜索结果列表，则继续输入后刷新搜索列表
                         }
                     }
                     binding.ivClear.setVisibility(View.VISIBLE);
@@ -112,13 +108,13 @@ public class SearchDialogFragment extends DialogFragment {
             }
         });
         binding.ivClear.setOnClickListener(v -> binding.editSearch.setText(null));
-        //点击输入框但未输入任何字段时，点击透明遮罩时关闭弹窗
+        //透明遮罩点击时关闭弹窗
         binding.layoutEmptySearch.setOnClickListener(v -> {
             if (binding.searchResult.getVisibility() != View.VISIBLE) {
                 dismiss();
             }
         });
-        binding.cancel.setOnClickListener(v -> dismiss());//点击取消按钮，关闭弹窗
+        binding.cancel.setOnClickListener(v -> dismiss());
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -127,7 +123,7 @@ public class SearchDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentSearchDialogBinding.inflate(inflater, container, false);
-        Window win = getDialog().getWindow();//获取当前对话框窗口
+        Window win = getDialog().getWindow();
         // 一定要设置Background，如果不设置，window属性设置无效
         win.setBackgroundDrawable( new ColorDrawable(Color.TRANSPARENT));
 

@@ -1,4 +1,4 @@
-package com.example.myapplication.long.model
+package com.example.myapplication.long2.model
 
 
 data class BusLine(

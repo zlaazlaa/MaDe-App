@@ -1,4 +1,4 @@
-package com.example.myapplication.long.model
+package com.example.myapplication.long2.model
 
 //存放站点或线路，用来呈现搜索结果和收藏界面
 open class StopOrLine{
