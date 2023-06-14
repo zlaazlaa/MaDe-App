@@ -6,9 +6,8 @@ import com.example.myapplication.long2.FavoriteOperator
 import com.example.myapplication.long2.ui.adapter.FavoriteItemRecycleViewAdapter
 
 class FavoriteItemTouchHelper(
-    private val itemMover: FavoriteOperator
+    private val favoriteOperator: FavoriteOperator
 ) : ItemTouchHelper.Callback(){
-    var canDrag = false
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
@@ -28,7 +27,7 @@ class FavoriteItemTouchHelper(
         return if(adapter is FavoriteItemRecycleViewAdapter) {
             val fromPosition = viewHolder.bindingAdapterPosition
             val toPosition = target.bindingAdapterPosition
-            itemMover.moveFavorite(adapter.city ,fromPosition, toPosition) //viewHolder实现,livedata变化后自动通知ui
+            favoriteOperator.moveFavorite(adapter.city ,fromPosition, toPosition) //viewHolder实现,livedata变化后自动通知ui
             true
         } else false
 
@@ -44,7 +43,7 @@ class FavoriteItemTouchHelper(
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        favoriteOperator.postFavorite()
         super.clearView(recyclerView, viewHolder)
-        canDrag = false
     }
 }
