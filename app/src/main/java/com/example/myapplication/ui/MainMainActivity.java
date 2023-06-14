@@ -2,6 +2,9 @@ package com.example.myapplication.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,8 +12,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.myapplication.bean.CityBean;
 import com.example.myapplication.bean.CityGroup;
 import com.example.myapplication.databinding.ActivityMainMainBinding;
+import com.example.myapplication.long2.model.Favorite;
 import com.example.myapplication.long2.ui.CityActivity;
+import com.example.myapplication.long2.ui.FavoriteActivity;
 import com.example.myapplication.util.FileUtil;
+import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -24,43 +33,53 @@ public class MainMainActivity extends AppCompatActivity implements ItemOnclickLi
     private ActivityMainMainBinding binding;
     //    private List<String> stringList;
     private List<CityBean> cityBeans;
+    private MaterialButton materialButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        materialButton = binding.jumpToFav;
+        materialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Intent intent = new Intent(MainMainActivity.this, FavoriteActivity.class);
+               intent.putExtra("user", "mqy");
+               startActivity(intent);
+            }
+        });
         init();
     }
 
-    private void init(){
+    private void init() {
         //从json文件里面读取城市信息并按首字母分组排序
         List<CityGroup> cityGroupList = getCityGroupList();
         //拿热门城市数据
         List<CityBean> cityHotList = getHotCityList();
-        CityHotAdapter cityHotAdapter = new CityHotAdapter(this,cityHotList);
+        CityHotAdapter cityHotAdapter = new CityHotAdapter(this, cityHotList);
         binding.listHot.setAdapter(cityHotAdapter);
         binding.listHot.setNestedScrollingEnabled(false);
         cityHotAdapter.setOnclickListener(this);
-        CityGroupAdapter cityGroupAdapter = new CityGroupAdapter(this,cityGroupList);
+        CityGroupAdapter cityGroupAdapter = new CityGroupAdapter(this, cityGroupList);
         binding.listGroup.setAdapter(cityGroupAdapter);
         binding.listGroup.setNestedScrollingEnabled(false);
         cityGroupAdapter.setOnclickListener(this);
         //搜索框点击事件
         binding.layoutSearch.setOnClickListener(v -> {
             SearchDialogFragment dialogFragment = new SearchDialogFragment(cityBeans, this);
-            dialogFragment.show(getSupportFragmentManager(),"show");
+            dialogFragment.show(getSupportFragmentManager(), "show");
         });
     }
 
 
     /**
-     *@params []
-     *@date 2023/6/7 1:29
-     *@description 获取城市数据并分组排序
-     *@return java.util.List<com.tech.stationsearch.bean.CityGroup>
+     * @return java.util.List<com.tech.stationsearch.bean.CityGroup>
+     * @params []
+     * @date 2023/6/7 1:29
+     * @description 获取城市数据并分组排序
      **/
-    private List<CityGroup> getCityGroupList(){
+    private List<CityGroup> getCityGroupList() {
         //获取城市json数据
         cityBeans = JSONObject.parseArray(FileUtil.readJsonStr(this), CityBean.class);
 //        stringList = cityBeans.stream().map(CityBean::getCityName).collect(Collectors.toList());
@@ -89,8 +108,10 @@ public class MainMainActivity extends AppCompatActivity implements ItemOnclickLi
         return cityGroupList;
     }
 
-    /**获取热门城市**/
-    private List<CityBean> getHotCityList(){
+    /**
+     * 获取热门城市
+     **/
+    private List<CityBean> getHotCityList() {
         List<CityBean> hotCityBean = new ArrayList<>();
         hotCityBean.add(cityBeans.get(2));
         hotCityBean.add(cityBeans.get(0));
@@ -105,10 +126,10 @@ public class MainMainActivity extends AppCompatActivity implements ItemOnclickLi
     }
 
     /**
-     *@params [str]
-     *@date 2023/6/7 1:30
-     *@description 各处点击城市点击事件 在这里统一处理
-     *@return void
+     * @return void
+     * @params [str]
+     * @date 2023/6/7 1:30
+     * @description 各处点击城市点击事件 在这里统一处理
      **/
     @Override
     public void itemOnclick(CityBean cityBean) {

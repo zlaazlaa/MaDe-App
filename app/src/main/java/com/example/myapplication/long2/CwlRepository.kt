@@ -294,14 +294,14 @@ class CwlRepository {
                 Favorite.TYPE_CODE_BUS_STOP -> {
                     getBusStopAndLineByCity(city).first.find { busStop ->
                         busStop.name == name
-                    }!!.let { busStop ->
+                    }?.let { busStop ->
                         return@Array Favorite(busStop)
                     }
                 }
                 Favorite.TYPE_CODE_BUS_LINE -> {
                     getBusStopAndLineByCity(city).second.find { busLine ->
                         busLine.name == name
-                    }!!.let { busLine ->
+                    }?.let { busLine ->
                         return@Array Favorite(busLine)
                     }
                 }

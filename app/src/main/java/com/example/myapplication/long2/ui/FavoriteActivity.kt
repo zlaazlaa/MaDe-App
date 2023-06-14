@@ -13,7 +13,7 @@ import com.example.myapplication.databinding.ActivityFavoriteBinding
 import com.example.myapplication.long2.ui.adapter.FavoriteContainerItemRecycleViewAdapter
 import com.example.myapplication.long2.ui.view_model.FavoriteViewModel
 
-const val KEY_FAVORITE_USER = "com.example.myapplication.ui.favoriteActivity.user"
+const val KEY_FAVORITE_USER = "user"
 class FavoriteActivity : AppCompatActivity() , ActivityJumper {
     private var binding : ActivityFavoriteBinding? = null
     private val viewModel : FavoriteViewModel by viewModels()
