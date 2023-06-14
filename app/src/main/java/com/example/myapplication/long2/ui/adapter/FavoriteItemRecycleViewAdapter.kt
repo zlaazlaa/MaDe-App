@@ -68,7 +68,6 @@ class FavoriteItemRecycleViewAdapter(
         val favoriteName = binding.stopOrLine.itemName
         val dragHandle = binding.stopOrLine.handleButton
         val favoriteInfoUnder = binding.stopOrLine.infoUnder
-        val favoriteInfoUnder2 = binding.stopOrLine.infoUnder2
         val root = binding.root
         val deleteButton = binding.stopOrLine.favoriteButtonInStopOrLineItem
 
@@ -76,10 +75,6 @@ class FavoriteItemRecycleViewAdapter(
             dragHandle.setOnTouchListener { _, event ->
                 return@setOnTouchListener if(MotionEvent.ACTION_DOWN == event.action) {
                     helper?.startDrag(this)
-                    true
-                }
-                else if(MotionEvent.ACTION_UP == event.action) {
-                    operator.postFavorite()
                     true
                 }
                 else false
