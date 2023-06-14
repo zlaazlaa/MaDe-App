@@ -34,7 +34,7 @@ class FavoriteViewModel(application: Application):AndroidViewModel(application) 
        field = value
        field?.let {
            viewModelScope.launch {
-               val temp = repository.getFavoritesUnlimited(it).groupBy{it.city}
+               val temp = repository.getFavorites(it).groupBy{it.city}
                _favorites.value = Triple(
                    OperateType.NEW_DATA_SET,
                    Triple(null,-1,-1),

@@ -36,8 +36,12 @@ class CwlRepository {
 
     private val requester = DataRequester.getInstance()
 
+
+     fun getBusStopByCityAndName(city: City,stopName: String):BusStop{
+        return _busStopAndLineMap[city]!!.first.find { it.name == stopName }!!
+    }
     //没有使用，此处代表调用的是有限次api
-    private suspend fun getBusStopAndLineByCity(city: City): Pair<List<BusStop>, List<BusLine>> =
+    suspend fun getBusStopAndLineByCity(city: City): Pair<List<BusStop>, List<BusLine>> =
         withContext(Dispatchers.Default) {
             val temp = _busStopAndLineMap[city]
             if (temp == null) {
@@ -71,7 +75,7 @@ class CwlRepository {
 
         val mapNameBusLine = HashMap<String, BusLine>() //name-busLine map
         val mapBusStopNameLines =
-            HashMap<String, Triple<ArrayList<BusLine>, Double, Double>>() //name-line_list map
+            HashMap<String, ArrayList<BusLine>>() //name-line_list map
 
         val channel = Channel<Pair<String, String>?>()
 
@@ -109,16 +113,9 @@ class CwlRepository {
                     val allStation = JSONArray(obj.getString(FIELD_ALL_BUS_LINE_STATION))
                     val receivedRelations = List(allStation.length()) { i ->
                         val objStation = allStation.getJSONObject(i)
-                        val locationStr = objStation.getString(FIELD_BUS_STOP_LOCATION)
-                        val index = locationStr.indexOf(',')
-                        val x = locationStr.subSequence(0, index).toString().toDouble()
-                        val y = locationStr.subSequence(index + 1, locationStr.length).toString()
-                            .toDouble()
 
                         StopAndSequence(
                             objStation.getString(FIELD_BUS_STOP_NAME),
-                            x,
-                            y,
                             objStation.getInt(FIELD_BUS_STOP_SEQUENCE)
                         )
                     }
@@ -128,10 +125,9 @@ class CwlRepository {
                         receivedRelations.sortedBy { r -> r.sequence }.map { r -> r.stopName }
                     )
                     for (relation in receivedRelations) {
-                        val triple = mapBusStopNameLines[relation.stopName]
-                        val list = triple?.first ?: ArrayList()
+                        val list = mapBusStopNameLines[relation.stopName] ?: ArrayList()
                         list.add(busLine)
-                        mapBusStopNameLines[relation.stopName] = Triple(list,relation.x,relation.y)
+                        mapBusStopNameLines[relation.stopName] = list
                     }
                     mapNameBusLine.putIfAbsent(
                         busLineName,
@@ -151,7 +147,7 @@ class CwlRepository {
                 BusStop(
                     it.key,
                     city,
-                    it.value.first,
+                    it.value
                 )
             },
             mapNameBusLine.map { p -> p.value }
@@ -359,8 +355,6 @@ class CwlRepository {
 
     private inner class StopAndSequence(
         val stopName: String,
-        val x: Double,
-        val y: Double,
         val sequence: Int
     )
 

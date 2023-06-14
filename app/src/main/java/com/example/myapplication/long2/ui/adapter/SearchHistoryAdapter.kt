@@ -50,7 +50,7 @@ class SearchItemAdapter(
 
         holder.root.setOnClickListener {
             item.busLine?.let {
-                activityJumper.jumpToBusLineDetail(item.city.cityStr,item.city.cityName,item.name,it.startStopName!!)
+                activityJumper.jumpToBusLineDetail(item.city.cityStr,item.city.cityName,item.name,it.busStopNames.random())
             }
             item.busStop?.let {
                 activityJumper.jumpToBusStopDetail(item.city.cityStr, item.city.cityName, item.name)

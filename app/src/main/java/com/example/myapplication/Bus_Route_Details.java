@@ -1332,6 +1332,8 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
             all_miles.setText("首05:00 末21:30 | 全程:"+all_ms+"公里 | 票价:2元");
 
             for (int i=0; i<busRoute.getAllStations().size(); i++) {
+                Log.d("test","Current_site: "+Current_site);
+                Log.d("test","busRoute.getAllStations().get(i).getName() :"+ busRoute.getAllStations().get(i).getName());
                 if(busRoute.getAllStations().get(i).getName().equals(Current_site)){
                     Current_i = i;
                     break;

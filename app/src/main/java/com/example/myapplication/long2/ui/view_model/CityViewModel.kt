@@ -37,7 +37,7 @@ class CityViewModel(application: Application):
        viewModelScope.launch {
            if (this@CityViewModel.nowCity != city) {
                nowCity = city
-               repository.getBusStopAndLineByCityUnlimited(city).let { p->
+               repository.getBusStopAndLineByCity(city).let { p->
                    p.first.let { _data.value = it }
                    p.second.let {
                         _lineData.value = it

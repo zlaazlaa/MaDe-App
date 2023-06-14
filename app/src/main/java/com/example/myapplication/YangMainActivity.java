@@ -18,6 +18,13 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.amap.api.services.route.RouteBusWalkItem;
+import com.example.myapplication.long2.CwlRepository;
+import com.example.myapplication.long2.model.BusLine;
+import com.example.myapplication.long2.model.BusStop;
+import com.example.myapplication.long2.model.City;
+import com.example.myapplication.long2.ui.ProgressDialogFragment;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +39,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+
+import kotlin.Result;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
 
 public class YangMainActivity extends AppCompatActivity {
     private SimpleAdapter simpleAdapter;
@@ -46,6 +58,7 @@ public class YangMainActivity extends AppCompatActivity {
     private String FUrl="default";
     private String Url="default";
     private String username="mqy";
+    private  BusStop stop=null;
     private String[] routeN=new String[50];
     private String[] routeDR1=new String[50];
     private String[] routeDS1=new String[50];
@@ -53,6 +66,8 @@ public class YangMainActivity extends AppCompatActivity {
     private String[] routeDR2=new String[50];
     private String[] routeDS2=new String[50];
     private String[] routeT2=new String[50];
+
+    private ProgressDialogFragment dialogFragment = new ProgressDialogFragment();
     @SuppressLint("HandlerLeak")
     private Handler handler1 = new Handler(){
         @Override
@@ -97,26 +112,14 @@ public class YangMainActivity extends AppCompatActivity {
                             new int[]{R.id.routename,R.id.routedirection1,R.id.routedistance1,R.id.routetime1,R.id.routedirection2,R.id.routedistance2,R.id.routetime2});
                     listView1.setAdapter(simpleAdapter);
                     System.out.println(Arrays.toString(routeN));
+                    dialogFragment.dismiss();
                 }catch (JSONException e) {
                     e.printStackTrace();
                     System.out.println(e.toString());
                 }
             }else if(msg.what==3){
-                try {
-                    String result=String.valueOf(msg.obj);
-                    JSONArray jsonArray=new JSONArray(result);
-                    for(int i=0;i<jsonArray.length();i++){
-                        routeN[i]=jsonArray.getString(i);
-                    }
-                    simpleAdapter=new SimpleAdapter(YangMainActivity.this,getData(),R.layout.list_view,
-                            new String[]{"routename","routedirection1","routedistance1","routetime1","routedirection2","routedistance2","routetime2"},
-                            new int[]{R.id.routename,R.id.routedirection1,R.id.routedistance1,R.id.routetime1,R.id.routedirection2,R.id.routedistance2,R.id.routetime2});
-                    listView1.setAdapter(simpleAdapter);
-                    System.out.println(Arrays.toString(routeN));
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                    System.out.println(e.toString());
-                }
+                stop = (BusStop) msg.obj;
+
             }
         }
     };
@@ -129,7 +132,7 @@ public class YangMainActivity extends AppCompatActivity {
         textView=findViewById(R.id.textView);
         listView1=findViewById(R.id.ListView1);
         //根据页面跳转设置变量city，station_N，username
-
+        dialogFragment.show(getSupportFragmentManager(),"data loading");
 //        city="南京";
 //        city_str="nanjing";
 //        station_N="邮电大学东";
@@ -273,6 +276,22 @@ public class YangMainActivity extends AppCompatActivity {
                     System.out.println("t"+Obj);
                 }
 
+                BusStop stop = CwlRepository.Companion.getInstance().getBusStopByCityAndName(
+                        new City(city_str,city),station_N
+                );
+
+            }
+        }.start();
+        new Thread(){
+            @Override
+            public void run() {
+                BusStop stop = CwlRepository.Companion.getInstance().getBusStopByCityAndName(
+                    new City(city_str,city),station_N
+            );
+                Message msg=new Message();
+                msg.what=3;
+                msg.obj=stop;
+                handler1.sendMessage(msg);
             }
         }.start();
         System.out.println("uit"+Arrays.toString(routeN));
@@ -290,8 +309,21 @@ public class YangMainActivity extends AppCompatActivity {
                 Intent intent = new Intent(YangMainActivity.this, Bus_Route_Details.class);
                 intent.putExtra("city_str", city_str);
                 intent.putExtra("city_name", city);
+
                 intent.putExtra("line", routeN[i].split("\\(")[0]);
-                intent.putExtra("xing_Current_site",routeDS1[i]);
+                Random random = new Random();
+
+                BusLine line = stop.getBusLines().get(0);
+                for(BusLine _line : stop.getBusLines()){
+                   if(_line.getName().equals(routeN[i])) {
+                       line = _line;
+                       break;
+                   }
+                }
+
+                intent.putExtra("xing_Current_site",line.getBusStopNames().get(
+                        new Random().nextInt(line.getBusStopNames().size())));
+
                 intent.putExtra("xing_user",username);
                 startActivity(intent);
             }

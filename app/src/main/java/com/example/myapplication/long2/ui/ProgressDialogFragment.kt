@@ -10,9 +10,11 @@ import com.example.myapplication.R
 class ProgressDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            AlertDialog.Builder(activity).setTitle("提示")
+           val dialog = AlertDialog.Builder(activity).setTitle("提示")
                 .setView(layoutInflater.inflate(R.layout.fragment_progress_dialog,null))
                 .create()
+            dialog.setCanceledOnTouchOutside(false)
+            dialog
         }!!
     }
 

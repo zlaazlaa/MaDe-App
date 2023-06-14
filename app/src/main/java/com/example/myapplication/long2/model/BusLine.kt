@@ -4,7 +4,7 @@ package com.example.myapplication.long2.model
 data class BusLine(
     val name:String,
     val city: City,
-    private val busStopNames : List<String> = ArrayList(),
+    val busStopNames : List<String> = ArrayList(),
 ){
     val startStopName:String?
     get()=busStopNames.firstOrNull()

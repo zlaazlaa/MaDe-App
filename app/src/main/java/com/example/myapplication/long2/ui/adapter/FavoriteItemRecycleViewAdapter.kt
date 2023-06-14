@@ -45,7 +45,7 @@ class FavoriteItemRecycleViewAdapter(
             if(view != holder.dragHandle&& view!=holder.deleteButton){
                 item.let {
                     if(it.isBusLine())
-                        activityJumper.jumpToBusLineDetail(item.city.cityStr,item.city.cityName,item.name,item.busLine!!.startStopName!!)
+                        activityJumper.jumpToBusLineDetail(item.city.cityStr,item.city.cityName,item.name,item.busLine!!.busStopNames.random())
                     else if(it.isBusStop())
                         activityJumper.jumpToBusStopDetail(item.city.cityStr, item.city.cityName, item.name)
                 }
