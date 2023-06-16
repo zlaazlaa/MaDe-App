@@ -57,7 +57,6 @@ class FavoriteActivity : AppCompatActivity() , ActivityJumper {
         intent.putExtra("city_str", city_str)
         intent.putExtra("city_name", city_name)
         intent.putExtra("station", station)
-        Toast.makeText(this, "jump to busStop detail", Toast.LENGTH_SHORT).show()
         startActivity(intent)
     }
 
@@ -69,7 +68,6 @@ class FavoriteActivity : AppCompatActivity() , ActivityJumper {
         intent.putExtra("xing_Current_site",nowStopName)
         intent.putExtra("xing_user",viewModel.user!!)
         startActivity(intent)
-        Toast.makeText(this, "jump to busLine detail", Toast.LENGTH_SHORT).show()
     }
 
 

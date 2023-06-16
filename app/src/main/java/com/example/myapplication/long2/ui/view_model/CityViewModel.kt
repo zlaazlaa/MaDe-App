@@ -47,7 +47,7 @@ class CityViewModel(application: Application):
                }
                if (this@CityViewModel.user != user) {
                    this@CityViewModel.user = user
-                   val result = repository.getFavoritesUnlimited(user)
+                   val result = repository.getFavorites(user)
                    _favorites.value = Triple(
                        OperateType.NEW_DATA_SET,
                        result.firstOrNull(),

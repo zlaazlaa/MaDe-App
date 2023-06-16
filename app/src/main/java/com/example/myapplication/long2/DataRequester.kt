@@ -34,8 +34,10 @@ class DataRequester {
             .method("GET", null).build()
         val call = client.newCall(request)
         val response = call.execute()
+        val res = response.body?.string()
 
-        return response.body?.string() ?: "[]"
+
+        return res ?: "[]"
     }
 
     suspend fun postFavorite(jsonString: String) {
@@ -43,7 +45,7 @@ class DataRequester {
         postData(DOMAIN + "save_favorites", jsonString)
     }
 
-    fun fetchBusLinesNameByCity(city: City): String = fetchData(DOMAIN + "query_all_bus")
+    fun fetchBusLinesNameByCity(city: City): String = fetchData(DOMAIN + "get_line_by_city?city=${city.cityStr}")
 
 
     fun fetchBusLineInfoByCityAndName(city: City, name: String): String {

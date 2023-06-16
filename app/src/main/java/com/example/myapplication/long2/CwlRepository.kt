@@ -13,6 +13,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 private const val FIELD_BUS_LINE_NAME_TEST = "bus_name"
+private const val FIELD_BUS_LINE_NAME_BY_CITY = "line_name"
 private const val FIELD_BUS_LINE_NAME = "name"
 private const val FIELD_ALL_BUS_LINE_STATION = "all_station"
 private const val FIELD_BUS_LINE_ID = "id"
@@ -69,8 +70,8 @@ class CwlRepository {
     //没用使用 有限次
     private suspend fun getBusStopsAndLinesData(city: City): Pair<List<BusStop>, List<BusLine>> {
         //通过城市获取线路名
-        //TODO 当前是测试数据 query_all_bus
-        val jsonArray = JSONArray(requester.fetchBusLinesNameByCity(city))
+        //改为了get_line_by_city
+        val jsonArray = JSONArray(JSONObject(requester.fetchBusLinesNameByCity(city)).getString("lines"))
 
 
         val mapNameBusLine = HashMap<String, BusLine>() //name-busLine map
@@ -85,7 +86,7 @@ class CwlRepository {
             val jobs = ArrayList<Job>()
             for (i in 0 until jsonArray.length()) {
                 val obj = jsonArray.getJSONObject(i)
-                val busLineName = obj.getString(FIELD_BUS_LINE_NAME_TEST)
+                val busLineName = obj.getString(FIELD_BUS_LINE_NAME_BY_CITY)
                 jobs.add(
                     launch(Dispatchers.IO) {
                         produceAllStationJson(channel, city, busLineName)
@@ -274,7 +275,7 @@ class CwlRepository {
         requester.postFavorite(json)
     }
 
-    suspend fun getFavorites(userName: String): List<Favorite> {
+    suspend fun getFavorites(userName: String): MutableList<Favorite> {
         val jsonArray = JSONArray(
             withContext(Dispatchers.Default) {
                 requester.fetchFavoriteByUsername(userName)
@@ -310,7 +311,7 @@ class CwlRepository {
                     null
                 }
             }
-        }.toList().filterNotNull()
+        }.filterNotNull().toMutableList()
     }
 
     suspend fun getFavoritesUnlimited(userName: String): MutableList<Favorite> {

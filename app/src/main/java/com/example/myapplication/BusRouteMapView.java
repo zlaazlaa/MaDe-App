@@ -67,7 +67,8 @@ public class BusRouteMapView extends View {
         for(int i=0 ; i<stationNames.size() ; i++){
             if(stationNames.get(i).equals(Current_site)){
                 stationNames.set(i,"当前·"+stationNames.get(i));
-                Current_i = i;
+                Current_i = stationNames.size()-1-i;
+                break;
             }
         }
         Collections.reverse(stationNames);

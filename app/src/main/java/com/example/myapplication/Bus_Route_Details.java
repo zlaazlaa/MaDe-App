@@ -106,7 +106,8 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
     private String city_code = "021";
     private String HTTPHOST = "https://ljm-python.azurewebsites.net";
     private String Add_favorite_http = "https://ljm-python.azurewebsites.net/add_favorite";
-    private String Query_favorite_http = "https://ljm-python.azurewebsites.net/query_favorite";
+    private String Query_favorite_http = "http://49.234.42.16/api/query_favorite";
+
     private String Delete_favorite_http = "https://ljm-python.azurewebsites.net/delete_favorite";
 
     private String httpResult = "OK";
@@ -1156,9 +1157,33 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
 
                 boolean InCollected = false;
                 for (FavoriteItem favoriteItem : favoriteItems) {
-                    if(favoriteItem.name.equals(Current_site)){
+                    if(favoriteItem.name.contains(busNumber) || busNumber.contains(favoriteItem.name)){
                         InCollected = true;
                         mEditor.putString("Current_Favorite_id", favoriteItem.getId()+"");
+
+                        int[] buttonColors = {Color.parseColor("#f80eff"), Color.parseColor("#1da905")};
+                        int[] textColors = {Color.WHITE, Color.WHITE};
+
+                        int[][] states = {
+                                new int[]{android.R.attr.state_selected},
+                                new int[]{}
+                        };
+
+                        ColorStateList colorStateList = new ColorStateList(states, buttonColors);
+                        ColorStateList textStateList = new ColorStateList(states, textColors);
+
+                        button_collect.setBackgroundTintList(colorStateList);
+
+                        button_collect.setTextColor(textStateList);
+
+                        String[] buttonTexts = {"已收藏", "收藏"};
+                        button_collect.setText(buttonTexts[1]);
+
+                        button_collect.setSelected(InCollected);
+                        button_collect.setBackgroundTintList(colorStateList);
+                        button_collect.setTextColor(textStateList);
+                        button_collect.setText(buttonTexts[InCollected ? 0 : 1]);
+
                         break;
                     }
                 }
