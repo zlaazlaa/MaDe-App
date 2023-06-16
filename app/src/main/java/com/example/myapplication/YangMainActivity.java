@@ -140,7 +140,7 @@ public class YangMainActivity extends AppCompatActivity {
         city_str = getIntent().getStringExtra("city_str");
         station_N = getIntent().getStringExtra("station");
         textView.setText(station_N);
-        FUrl="https://ljm-python.azurewebsites.net/query_favorite?message="+username;
+        FUrl="http://49.234.42.16/api/query_favorite?message="+username;
         Thread thread1=new Thread(){
             @Override
             public void run() {
@@ -188,7 +188,7 @@ public class YangMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(toggleButton.isChecked()){
-                    FUrl="https://ljm-python.azurewebsites.net/add_favorite?city="+city_str+"&favorite_type=1&user="+username+"&name="+station_N;
+                    FUrl="http://49.234.42.16/api/add_favorite?city="+city_str+"&favorite_type=1&user="+username+"&name="+station_N;
                     new Thread(){
                         @Override
                         public void run() {
@@ -203,7 +203,7 @@ public class YangMainActivity extends AppCompatActivity {
                         }
                     }.start();
                 }else{
-                    FUrl="https://ljm-python.azurewebsites.net/query_favorite?message="+username;
+                    FUrl="http://49.234.42.16/api/query_favorite?message="+username;
                     new Thread(){
                         @Override
                         public void run() {
@@ -227,7 +227,7 @@ public class YangMainActivity extends AppCompatActivity {
                                             break;
                                         }
                                     }
-                                    FUrl="https://ljm-python.azurewebsites.net/delete_favorite?id="+id;
+                                    FUrl="http://49.234.42.16/api/delete_favorite?id="+id;
                                     String result1=gethttpresult(FUrl);
                                     System.out.println(result1);
                                 } catch (JSONException e) {
@@ -253,7 +253,7 @@ public class YangMainActivity extends AppCompatActivity {
                 };
             }
         });
-        Url="https://ljm-python.azurewebsites.net/station_line_info?city="+city_str+"&station_name="+station_N;
+        Url="http://49.234.42.16/api/station_line_info?city="+city_str+"&station_name="+station_N;
         new Thread(){
             @Override
             public void run() {

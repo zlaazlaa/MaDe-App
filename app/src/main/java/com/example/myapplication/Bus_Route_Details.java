@@ -104,11 +104,11 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
     private String user = "mqy";
     private String favorite_type = "0";
     private String city_code = "021";
-    private String HTTPHOST = "https://ljm-python.azurewebsites.net";
-    private String Add_favorite_http = "https://ljm-python.azurewebsites.net/add_favorite";
+    private String HTTPHOST = "http://49.234.42.16/api";
+    private String Add_favorite_http = "http://49.234.42.16/api/add_favorite";
     private String Query_favorite_http = "http://49.234.42.16/api/query_favorite";
 
-    private String Delete_favorite_http = "https://ljm-python.azurewebsites.net/delete_favorite";
+    private String Delete_favorite_http = "http://49.234.42.16/api/delete_favorite";
 
     private String httpResult = "OK";
     private BusRoute busRoute;
@@ -534,12 +534,12 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
 
         query_favorite();
         Current_Favorite_id = mSharedPreferences.getString("Current_Favorite_id", "");
-        String isCollected = mSharedPreferences.getString("isCollected", "");
+/*        String isCollected = mSharedPreferences.getString("isCollected", "");
         if(isCollected.equals("1")){
             button_collect.setSelected(true);
         }else {
             button_collect.setSelected(false);
-        }
+        }*/
         button_collect.setBackgroundTintList(colorStateList);
         button_collect.setTextColor(textStateList);
         button_collect.setText(buttonTexts[button_collect.isSelected() ? 0 : 1]);
