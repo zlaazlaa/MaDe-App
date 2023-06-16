@@ -561,7 +561,7 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
             }
 
             private void Add_Favorite() {
-                new Add_Favorite_RequestTask().execute(Add_favorite_http, city, favorite_type, user, Current_site);
+                new Add_Favorite_RequestTask().execute(Add_favorite_http, city, favorite_type, user, busNumber);
             }
 
             class Add_Favorite_RequestTask extends AsyncTask<String, Void, String> {
@@ -637,7 +637,7 @@ public class Bus_Route_Details extends Activity implements AMap.OnMarkerClickLis
 
                         boolean InCollected = false;
                         for (FavoriteItem favoriteItem : favoriteItems) {
-                            if(favoriteItem.name.equals(Current_site)){
+                            if(favoriteItem.name.equals(busNumber)){
                                 InCollected = true;
                                 mEditor.putString("Current_Favorite_id", favoriteItem.getId()+"");
                                 break;
