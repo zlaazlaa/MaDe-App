@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -41,13 +42,15 @@ class CityActivity : AppCompatActivity(), ActivityJumper {
     //bottom sheet var
     private var bottomSheetAdapter: SearchItemAdapter? = null
     private var bottomSheetBehavior: BottomSheetBehavior<RelativeLayout>? = null
+    private var progressDialogFragment:ProgressDialogFragment? = null
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("cwl", "onCreate")
         super.onCreate(savedInstanceState)
         binding = ActivityCityLongBinding.inflate(layoutInflater)
         adapter = BusStopItemRecyclerViewAdapter(viewModel, this)
-        val progressDialogFragment = ProgressDialogFragment()
+        progressDialogFragment = ProgressDialogFragment()
         binding?.run {
             setContentView(root)
             searchInputButton.setOnClickListener {
@@ -66,17 +69,6 @@ class CityActivity : AppCompatActivity(), ActivityJumper {
             }
             initBottomSheet(bottomSheetSearch)
         }
-        with(viewModel) {
-            data.observe(this@CityActivity) { data ->
-                canSearch = true
-                this@CityActivity.adapter!!.busStopData = data
-            }
-            favorites.observe(this@CityActivity) { data ->
-                this@CityActivity.adapter!!.setFavorites(data.first, data.second, data.third)
-                progressDialogFragment.dismiss()
-            }
-        }
-
         intent?.let {
             val cityName = it.getStringExtra(KEY_CITY_NAME)
             val cityStr = it.getStringExtra(KEY_CITY_STR)
@@ -85,8 +77,33 @@ class CityActivity : AppCompatActivity(), ActivityJumper {
                 user!!,
                 City(cityName = cityName!!, cityStr = cityStr!!),
             )
+            Log.d("cwl", "onResume: after reset user")
         }
-        progressDialogFragment.show(supportFragmentManager, "data loading")
+        with(viewModel) {
+            data.observe(this@CityActivity) { data ->
+                canSearch = true
+                this@CityActivity.adapter!!.busStopData = data
+            }
+            favorites.observe(this@CityActivity) { data ->
+                this@CityActivity.adapter!!.setFavorites(data.first, data.second, data.third)
+                progressDialogFragment?.dismiss()
+            }
+        }
+
+    }
+
+    override fun onStop() {
+        viewModel.clearFavorite()
+        super.onStop()
+    }
+
+
+    override fun onResume() {
+        Log.d("cwl", "onResume")
+        progressDialogFragment?.show(supportFragmentManager, "data loading")
+        viewModel.resetFavorite()
+
+        super.onResume()
     }
 
     private fun initBottomSheet(bottomSheetBinding: BottomSheetSearchBinding) {
@@ -149,6 +166,8 @@ class CityActivity : AppCompatActivity(), ActivityJumper {
 //        viewModel.postFavorite()
 //        super.onStop()
 //    }
+
+
 
     override fun jumpToBusStopDetail(city_str: String, city_name: String, station: String) {
         val intent = Intent(this, YangMainActivity::class.java)

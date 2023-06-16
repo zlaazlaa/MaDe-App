@@ -13,61 +13,80 @@ import com.example.myapplication.long2.Searcher
 import com.example.myapplication.long2.model.*
 
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-class CityViewModel(application: Application):
+class CityViewModel(application: Application) :
     AndroidViewModel(application),
     FavoriteOperator, Searcher {
     private val repository: CwlRepository = CwlRepository.getInstance()
-    private val _data:MutableLiveData<List<BusStop>> = MutableLiveData()
-    private val _favorites:MutableLiveData<Triple<OperateType, Favorite?,MutableList<Favorite>>>
-    = MutableLiveData()
-    private val _lineData : MutableLiveData<List<BusLine>> = MutableLiveData()
+    private val _data: MutableLiveData<List<BusStop>> = MutableLiveData()
+    private val _favorites: MutableLiveData<Triple<OperateType, Favorite?, MutableList<Favorite>>> =
+        MutableLiveData()
+    private val _lineData: MutableLiveData<List<BusLine>> = MutableLiveData()
 
-    val data :LiveData<List<BusStop>> = _data
+    val data: LiveData<List<BusStop>> = _data
 
-    val favorites :LiveData<Triple<OperateType, Favorite?,MutableList<Favorite>>> = _favorites
+    val favorites: LiveData<Triple<OperateType, Favorite?, MutableList<Favorite>>> = _favorites
 
-    var user:String? = null
-    private set
+    var user: String? = null
+        private set
 
     var nowCity: City? = null
-    private set
+        private set
 
-    fun setUserAndCity(user:String,city: City){
-       viewModelScope.launch {
-           if (this@CityViewModel.nowCity != city) {
-               nowCity = city
-               repository.getBusStopAndLineByCity(city).let { p->
-                   p.first.let { _data.value = it }
-                   p.second.let {
+    fun setUserAndCity(user: String, city: City) {
+        viewModelScope.launch {
+            if (this@CityViewModel.nowCity != city) {
+                nowCity = city
+                repository.getBusStopAndLineByCity(city).let { p ->
+                    p.first.let { _data.value = it }
+                    p.second.let {
                         _lineData.value = it
 
-                   }
-                   Log.d("cwl", "setUserAndCity: data get")
-               }
-               if (this@CityViewModel.user != user) {
-                   this@CityViewModel.user = user
-                   val result = repository.getFavorites(user)
-                   _favorites.value = Triple(
-                       OperateType.NEW_DATA_SET,
-                       result.firstOrNull(),
-                       result
-                   )
-                   Log.d("cwl", "setUserAndCity: favorite get")
-               }
-           }
-       }
+                    }
+                    Log.d("cwl", "setUserAndCity: data get")
+                }
+
+                this@CityViewModel.user = user
+                val result = repository.getFavorites(user)
+                _favorites.value = Triple(
+                    OperateType.NEW_DATA_SET,
+                    result.firstOrNull(),
+                    result
+                )
+                Log.d("cwl", "setUserAndCity: favorite get")
+            }
+        }
+    }
+
+    fun clearFavorite(){
+        _favorites.value = Triple(
+            OperateType.NEW_DATA_SET,null,ArrayList()
+        )
+    }
+
+    fun resetFavorite() {
+        viewModelScope.launch {
+            user?.let {
+                val result = repository.getFavorites(it)
+                _favorites.value = Triple(
+                    OperateType.NEW_DATA_SET,
+                    result.firstOrNull(),
+                    result
+                )
+            }
+        }
     }
 
     override fun addFavorite(busLine: BusLine) {
         addFavorite(Favorite(busLine))
     }
 
-    override fun addFavorite( busStop: BusStop) {
+    override fun addFavorite(busStop: BusStop) {
         addFavorite(Favorite(busStop))
     }
 
-    private fun addFavorite(favorite: Favorite){
+    private fun addFavorite(favorite: Favorite) {
         val temp = _favorites.value?.third ?: ArrayList()
         temp.add(favorite)
         _favorites.value = Triple(
@@ -92,16 +111,17 @@ class CityViewModel(application: Application):
         }
     }
 
+
     override fun moveFavorite(city: City, fromPosition: Int, toPosition: Int) {
         //do nothing
     }
 
-    override fun postFavorite(){
-        user?.let { user->
+    override fun postFavorite() {
+        user?.let { user ->
             viewModelScope.launch {
-                _favorites.value?.third?.let{repository.postFavorites(user,it)}
-                    ?:let {
-                        repository.postFavorites(user,ArrayList())
+                _favorites.value?.third?.let { repository.postFavorites(user, it) }
+                    ?: let {
+                        repository.postFavorites(user, ArrayList())
                     }
             }
         }
@@ -111,20 +131,20 @@ class CityViewModel(application: Application):
         val temp = ArrayList<Pair<Int, StopOrLine>>()
         _data.value?.mapNotNull {
             val itemName = it.name
-            if(itemName.startsWith(name)) Pair(1,it)
-            else if(itemName.contains(name)) Pair(2,it)
+            if (itemName.startsWith(name)) Pair(1, it)
+            else if (itemName.contains(name)) Pair(2, it)
             else null
         }?.let {
-            temp.addAll(it.map { p-> Pair(p.first, StopOrLine(p.second)) })
+            temp.addAll(it.map { p -> Pair(p.first, StopOrLine(p.second)) })
         }
 
         _lineData.value?.mapNotNull {
             val itemName = it.name
-            if(itemName.startsWith(name)) Pair(1,it)
-            else if(itemName.contains(name)) Pair(2,it)
+            if (itemName.startsWith(name)) Pair(1, it)
+            else if (itemName.contains(name)) Pair(2, it)
             else null
         }?.let {
-            temp.addAll(it.map { p-> Pair(p.first, StopOrLine(p.second)) })
+            temp.addAll(it.map { p -> Pair(p.first, StopOrLine(p.second)) })
         }
         return temp.sortedBy { it.first }.map { it.second }
     }
